@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Solar Dashboard</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+    }
+    header {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 20px;
+    }
+    .container {
+      padding: 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    .filters {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    select {
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    .card {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 10px;
+      width: 120px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      margin: 5px 0;
+      font-size: 16px;
+      color: #0d47a1;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+    .chart {
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+    h2 {
+      font-size: 13px;
+      margin: 0 0 10px;
+      color: #333;
+    }
+  </style>
+  <script>
+    function updateChart() {
+      const model = document.getElementById('modelSelect').value;
+      const month = document.getElementById('monthSelect').value;
+      window.location.href = `/?model=${model}&month=${month}`;
+    }
+  </script>
+</head>
+<body>
+  <header>☀ Solar Power Forecasting Dashboard (2006)</header>
+
+  <div class="container">
+    <div class="filters">
+      <select id="modelSelect" onchange="updateChart()">
+        <option value="RandomForest" {{ 'selected' if selected_model == 'RandomForest' else '' }}>Random Forest</option>
+        <option value="Prophet" {{ 'selected' if selected_model == 'Prophet' else '' }}>Prophet</option>
+        <option value="XGBoost" {{ 'selected' if selected_model == 'XGBoost' else '' }}>XGBoost</option>
+        <option value="LightGBM" {{ 'selected' if selected_model == 'LightGBM' else '' }}>LightGBM</option>
+      </select>
+      <select id="monthSelect" onchange="updateChart()">
+        <option value="All" {{ 'selected' if selected_month == 'All' else '' }}>All Months</option>
+        <option value="January" {{ 'selected' if selected_month == 'January' else '' }}>January</option>
+        <option value="February" {{ 'selected' if selected_month == 'February' else '' }}>February</option>
+        <option value="March" {{ 'selected' if selected_month == 'March' else '' }}>March</option>
+        <option value="April" {{ 'selected' if selected_month == 'April' else '' }}>April</option>
+        <option value="May" {{ 'selected' if selected_month == 'May' else '' }}>May</option>
+        <option value="June" {{ 'selected' if selected_month == 'June' else '' }}>June</option>
+        <option value="July" {{ 'selected' if selected_month == 'July' else '' }}>July</option>
+        <option value="August" {{ 'selected' if selected_month == 'August' else '' }}>August</option>
+        <option value="September" {{ 'selected' if selected_month == 'September' else '' }}>September</option>
+        <option value="October" {{ 'selected' if selected_month == 'October' else '' }}>October</option>
+        <option value="November" {{ 'selected' if selected_month == 'November' else '' }}>November</option>
+        <option value="December" {{ 'selected' if selected_month == 'December' else '' }}>December</option>
+      </select>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>{{ mape }}</h3>
+        <div>MAPE (%)</div>
+      </div>
+      <div class="card">
+        <h3>{{ rmse }}</h3>
+        <div>RMSE</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="chart">
+        <h2>Actual vs {{ selected_model }} Prediction</h2>
+        {{ model_chart|safe }}
+      </div>
+      <div class="chart">
+        <h2>Daily Solar Power Generation</h2>
+        {{ daily_chart|safe }}
+      </div>
+      <div class="chart">
+        <h2>Average of Power(MW) by Month</h2>
+        {{ monthly_chart|safe }}
+      </div>
+      <div class="chart">
+        <h2>Average of Power(MW) by Day of Week</h2>
+        {{ dayofweek_chart|safe }}
+      </div>
+      <div class="chart">
+        <h2>RMSE and MAPE by Model</h2>
+        {{ error_chart|safe }}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
