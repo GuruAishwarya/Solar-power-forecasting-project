@@ -5,7 +5,7 @@ This project focuses on forecasting solar power generation using machine learnin
 - `power`
 
 ## 📊 Dataset
-- **Source**: [Your dataset source, if public]
+- **Source**: Private dataset collected from internal resources (not publicly available)
 - **Structure**: 1 year of data (2006) with power generation values at 5-minute intervals.
 - **Preprocessing**: The data was divided into:
   - **Training set**: January to October
